@@ -51,7 +51,7 @@ const home = () => {
                   </div>
                 </div>
                 <br />
-                <form className="row g-2" action="javascript:void(0);">
+                <form className="row g-2">
                   <div className="col">
                     <input
                       type="text"

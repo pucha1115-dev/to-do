@@ -1,6 +1,36 @@
 //import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import api from '../api'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { useState,useEffect } from "react";
+
 
 const Login = () => {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(null)
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault(true);
+
+    try {
+      const response = await api.post("/api/token/", {username, password})
+        localStorage.setItem(ACCESS_TOKEN, response.data.access)
+        localStorage.setItem(REFRESH_TOKEN, response.data.access)
+        setLoading(false)
+        navigate("/")
+        
+    } catch(error){
+      alert(error)
+    } finally{
+      setLoading(false)
+    }
+  }
+
+
   return (
     <div className="container">
       <div className="row">
@@ -10,10 +40,12 @@ const Login = () => {
             <form>
               <div className="mb-3">
                 <input
-                  type="email"
+                  type="text"
                   className="form-control"
+                  value={username}
                   id="inputEmail"
                   placeholder="Email"
+                  onChange={e => setUsername(e.target.value)}
                   required
                 />
               </div>
@@ -21,12 +53,14 @@ const Login = () => {
                 <input
                   type="password"
                   className="form-control"
+                  value={password}
                   placeholder="Password"
+                  onChange={e => setPassword(e.target.value)}
                   required
                 />
               </div>
               <div className="d-grid gap-2">
-                <button type="submit" className="btn btn-primary btn-block">
+                <button type="submit" disabled={loading? true:false} className="btn btn-primary btn-block" onClick={handleSubmit}>
                   Sign in
                 </button>
               </div>
