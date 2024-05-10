@@ -1,5 +1,5 @@
 //import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from '../api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { useState,useEffect } from "react";
@@ -9,8 +9,20 @@ const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(null)
-
   const navigate = useNavigate()
+
+
+  useEffect(()=>{
+    isLoggedIn();
+  },[])
+
+  const isLoggedIn = () => {
+    const token = localStorage.getItem(ACCESS_TOKEN)
+    if (token) {
+      console.log("token available")
+      navigate("/")
+    }
+  }
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -44,7 +56,7 @@ const Login = () => {
                   className="form-control"
                   value={username}
                   id="inputEmail"
-                  placeholder="Email"
+                  placeholder="Username"
                   onChange={e => setUsername(e.target.value)}
                   required
                 />
@@ -65,7 +77,7 @@ const Login = () => {
                 </button>
               </div>
               <div className="text-center mt-3">
-                <a href="#">Forgot password?</a>
+                <a href="#">Forgot password?</a> Don't have an account? <Link to="/register">Register</Link>
               </div>
             </form>
           </div>

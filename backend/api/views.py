@@ -20,6 +20,13 @@ class TodoListCreateView(generics.ListCreateAPIView):
         if serializer.is_valid():  # check if serializztion is valid
             serializer.save(author=self.request.user) # add the author to the note
 
+class TodoDeleteView(generics.DestroyAPIView):
+    serializer_class = TodoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Todo.objects.filter(author=user)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()

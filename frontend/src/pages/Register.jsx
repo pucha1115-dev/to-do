@@ -1,6 +1,6 @@
 //import { Link } from "react-router-dom";
 import {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../api'
 import {ACCESS_TOKEN} from '../constants'
 
@@ -67,7 +67,7 @@ const Register = () => {
                 </button>
               </div>
               <div className="text-center mt-3">
-                <p className="text-black">Already registered? Login</p>
+                <p className="text-black">Already registered? <Link to="/login">Login</Link></p>
               </div>
             </form>
           </div>
