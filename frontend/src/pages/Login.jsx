@@ -1,47 +1,45 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/exhaustive-deps */
 //import { Link } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
-import api from '../api'
+import api from "../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
-import { useState,useEffect } from "react";
-
+import { useState, useEffect } from "react";
 
 const Login = () => {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(null)
-  const navigate = useNavigate()
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(null);
+  const navigate = useNavigate();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     isLoggedIn();
-  },[])
+  }, []);
 
   const isLoggedIn = () => {
-    const token = localStorage.getItem(ACCESS_TOKEN)
+    const token = localStorage.getItem(ACCESS_TOKEN);
     if (token) {
-      console.log("token available")
-      navigate("/")
+      console.log("token available");
+      navigate("/");
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault(true);
 
     try {
-      const response = await api.post("/api/token/", {username, password})
-        localStorage.setItem(ACCESS_TOKEN, response.data.access)
-        localStorage.setItem(REFRESH_TOKEN, response.data.access)
-        setLoading(false)
-        navigate("/")
-        
-    } catch(error){
-      alert(error)
-    } finally{
-      setLoading(false)
+      const response = await api.post("/api/token/", { username, password });
+      localStorage.setItem(ACCESS_TOKEN, response.data.access);
+      localStorage.setItem(REFRESH_TOKEN, response.data.access);
+      setLoading(false);
+      navigate("/");
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
     }
-  }
-
+  };
 
   return (
     <div className="container">
@@ -57,7 +55,7 @@ const Login = () => {
                   value={username}
                   id="inputEmail"
                   placeholder="Username"
-                  onChange={e => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
@@ -67,17 +65,23 @@ const Login = () => {
                   className="form-control"
                   value={password}
                   placeholder="Password"
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
               <div className="d-grid gap-2">
-                <button type="submit" disabled={loading? true:false} className="btn btn-primary btn-block" onClick={handleSubmit}>
+                <button
+                  type="submit"
+                  disabled={loading ? true : false}
+                  className="btn btn-primary btn-block"
+                  onClick={handleSubmit}
+                >
                   Sign in
                 </button>
               </div>
               <div className="text-center mt-3">
-                <a href="#">Forgot password?</a> Don't have an account? <Link to="/register">Register</Link>
+                <a href="#">Forgot password?</a> Don't have an account?{" "}
+                <Link to="/register">Register</Link>
               </div>
             </form>
           </div>

@@ -25,8 +25,8 @@ class TodoDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return Todo.objects.filter(author=user)
+      user = self.request.user
+      return Todo.objects.filter(author=user)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
