@@ -30,7 +30,7 @@ const home = () => {
     try {
       const response = await api.post("/api/todos/", { task: todo, due_date });
       if (response.status === 201) {
-        alert("New task added.");
+        alert("Task added.");
         getTodos();
       }
     } catch (error) {
@@ -41,6 +41,7 @@ const home = () => {
   };
 
   const deleteTodo = async (id) => {
+    console.log("pressed delete");
     try {
       const response = await api.delete(`/api/todos/delete/${id}`);
       if (response.status === 204) {
@@ -65,7 +66,7 @@ const home = () => {
                   </div>
                   <div className="col-auto">
                     <Link to="/logout">
-                      <button className="btn btn-outline-primary">
+                      <button className="btn btn-outline-danger">
                         Logout
                         <i className="bi bi-box-arrow-right custom-icon"></i>
                       </button>
@@ -81,6 +82,7 @@ const home = () => {
                       className="form-control add-task"
                       placeholder="New Task..."
                       onChange={(e) => setTodo(e.target.value)}
+                      required
                     />
                   </div>
 

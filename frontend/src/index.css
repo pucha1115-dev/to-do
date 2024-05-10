@@ -102,4 +102,13 @@ div.button, div.checker, div.radio, div.selector, div.uploader {
   margin-right: 4px;
 }
 
+.due-date-image {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+}
+
+.due-date {
+  margin-right: 24px;
+}
 

@@ -1,14 +1,23 @@
 /* eslint-disable react/prop-types */
-// DeleteModal.jsimport Modal from "react-modal";
+const Modal = ({ isOpen, onClose }) => {
+  if (!isOpen) {
+    console.log("modal is close" + isOpen);
+  }
 
-const Modal = ({ isOpen, closeModal }) => {
   return (
-    <Modal isOpen={isOpen}>
-      <div>
-        <h2>Task Deleted</h2>
-        <button onClick={closeModal}>Close</button>
+    <div className="modal-overlay">
+      <div className="modal">
+        <div className="modal-header">
+          <h3>Modal Title</h3>
+          <button className="close-button" onClick={onClose}>
+            X
+          </button>
+        </div>
+        <div className="modal-body">
+          <p>Task Deleted.</p>
+        </div>
       </div>
-    </Modal>
+    </div>
   );
 };
 
