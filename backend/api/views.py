@@ -46,7 +46,7 @@ class TodoDeleteView(APIView):
     
     def delete(self, request, pk): # get the logged in user
         user = self.request.user
-        todo = Todo.objects.filter(author=user, pk=pk)
+        todo = Todo.objects.filter(author=user, pk=pk) # get the specific todo to be deleted
         todo.delete()
         return Response({"status": "deleted"})
     
