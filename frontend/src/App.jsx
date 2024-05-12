@@ -13,7 +13,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function Logout() {
   localStorage.clear();
-  return <Navigate to="/login/" />;
+  return <Navigate to="/login" />;
 }
 
 function App() {

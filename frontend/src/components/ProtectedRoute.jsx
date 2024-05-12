@@ -33,18 +33,26 @@ function ProtectedRoute({ children }) {
   };
 
   const auth = async () => {
-    const token = localStorage.getItem(ACCESS_TOKEN);
-    if (!token) {
+    const refreshToken_ = localStorage.getItem(REFRESH_TOKEN);
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
+    if (!accessToken) {
+      setIsAuthorized(false);
+      return;
+    }
+    const now = Date.now() / 1000;
+    const decodedRefreshToken = jwtDecode(refreshToken_); //decode the token
+    const refreshTokenExpiration = decodedRefreshToken.exp;
+    const decodedAccessToken = jwtDecode(accessToken); //decode the token
+    const accessTokenExpiration = decodedAccessToken.exp; // get the token expiration
+
+    if (refreshTokenExpiration < now) {
       setIsAuthorized(false);
       return;
     }
 
-    const decodedToken = jwtDecode(token); //decode the token
-    const tokenExpiration = decodedToken.exp; // get the token expiration
-    const now = Date.now() / 1000; // get date/time in seconds
-
     // if token is expired, refresh it
-    if (tokenExpiration < now) {
+    if (accessTokenExpiration < now) {
       await refreshToken();
       console.log("refreshed token");
     } else {

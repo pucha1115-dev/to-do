@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { useState, useEffect } from "react";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -35,7 +36,7 @@ const Login = () => {
       setLoading(false);
       navigate("/");
     } catch (error) {
-      alert(error);
+      alert("Invalid username or password.");
     } finally {
       setLoading(false);
     }
@@ -76,7 +77,7 @@ const Login = () => {
                   className="btn btn-primary btn-block"
                   onClick={handleSubmit}
                 >
-                  Sign in
+                  {loading ? <Spinner size={"sm"} /> : "Sign in"}
                 </button>
               </div>
               <div className="text-center mt-3">

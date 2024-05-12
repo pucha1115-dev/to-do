@@ -4,7 +4,7 @@ import api from "../api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const home = () => {
+const Home = () => {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +31,7 @@ const home = () => {
       const response = await api.post("/api/todos/", { task: todo, due_date });
       if (response.status === 201) {
         alert("Task added.");
+        setTodo("");
         getTodos();
       }
     } catch (error) {
@@ -43,7 +44,7 @@ const home = () => {
   const deleteTodo = async (id) => {
     console.log("pressed delete");
     try {
-      const response = await api.delete(`/api/todos/delete/${id}`);
+      const response = await api.delete(`/api/todos/delete/${id}/`);
       if (response.status === 204) {
         alert("Task Deleted.");
         getTodos();
@@ -130,4 +131,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;

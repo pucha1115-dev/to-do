@@ -1,63 +1,50 @@
-from django.shortcuts import render
-from rest_framework import generics
-from django.contrib.auth.models import User
-from .models import Todo
-from .serializer import UserSerializer, TodoSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import APIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
-
-# Create your views here.
+from rest_framework import status
+from .models import Todo
+from .serializer import TodoSerializer, UserSerializer
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 class TodoListView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request): # get the logged in user
-        user = self.request.user
-        todos = Todo.objects.filter(author=user) # get all todos that belongs to the logged in user
-        serializer = TodoSerializer(todos, many=True)    
-        return Response(serializer.data)    
+    def get(self, request):
+        todos = Todo.objects.filter(author=request.user)
+        serializer = TodoSerializer(todos, many=True)
+        return Response(serializer.data)
     
     def post(self, request):
-        user = self.request.user # get the logged in user
         serializer = TodoSerializer(data=request.data)
-        if serializer.is_valid() :
-            serializer.save(author=user); # add the logged in user as author
-            return Response(serializer.data)
-        return Response(serializer.errors)
-    
-   
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class TodoUpdateView(APIView):
-     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
      
-     def put(self, request, pk):
-        user =self.request.user # get the logged in user
-        todo = Todo.objects.get(author=user, pk=pk) # get the specific todo
-        serilaizer = TodoSerializer(todo, data=request.data) # update the todo
-        if serilaizer.is_valid():
-            serilaizer.save()
-            return Response(serilaizer.data)
-        return Response(serilaizer.errors)
-        
+    def put(self, request, pk):
+        todo = Todo.objects.get(author=request.user, pk=pk)
+        serializer = TodoSerializer(todo, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class TodoDeleteView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def delete(self, request, pk): # get the logged in user
-        user = self.request.user
-        todo = Todo.objects.filter(author=user, pk=pk) # get the specific todo to be deleted
-        todo.delete()
-        return Response({"status": "deleted"})
-    
-    
-class CreateUserVIew(APIView):
+    def delete(self, request, pk):
+        Todo.objects.filter(author=request.user, pk=pk).delete()
+        return Response({"status": "deleted"},status=status.HTTP_204_NO_CONTENT)
+
+class CreateUserView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
-        
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
