@@ -29,7 +29,11 @@ api.interceptors.response.use(
 
         if (error.response.status === 401 && !originalRequest._retry) { // expired token or unauthorized response
             originalRequest._retry = true;
-            const refreshToken = localStorage.getItem(REFRESH_TOKEN); // retrieve the refresh token
+            const refreshToken = localStorage.getItem(REFRESH_TOKEN);// retrieve the refresh token
+            
+            if(window.location.pathname === "/login"){
+                return;
+            }
 
             if (!refreshToken) {
                 window.location.href = '/login'; // Redirect to login if no refresh token

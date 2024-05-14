@@ -114,3 +114,11 @@ div.button, div.checker, div.radio, div.selector, div.uploader {
   margin-right: 24px;
 }
 
+.nav-item .nav-link.active-link {
+  color: green;
+}
+
+.nav-item .nav-link {
+  color: rgb(96, 96, 193);
+}
+

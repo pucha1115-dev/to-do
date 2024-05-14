@@ -21,12 +21,15 @@ const Login = () => {
   const isLoggedIn = () => {
     const accessToken = localStorage.getItem(ACCESS_TOKEN); 
     const now = Date.now() / 1000;
-    const decodedAccessToken = jwtDecode(accessToken); //decode the token
-    const accessTokenExpiration = decodedAccessToken.exp; // get the token expiration
-    if (accessToken && accessTokenExpiration > now) {
-      console.log("token available and not expired");
-      navigate("/");
-    }
+
+    if (accessToken) {
+      const decodedAccessToken = jwtDecode(accessToken); //decode the token
+      const accessTokenExpiration = decodedAccessToken.exp;
+      if(accessTokenExpiration > now) {
+        console.log("token available and not expired");
+        navigate("/");
+      }
+    } 
   };
 
   const handleSubmit = async (e) => {
@@ -40,7 +43,7 @@ const Login = () => {
       setLoading(false);
       navigate("/");
     } catch (error) {
-      alert("Invalid username or password.");
+      alert("Invalid username or password." + error);
     } finally {
       setLoading(false);
     }

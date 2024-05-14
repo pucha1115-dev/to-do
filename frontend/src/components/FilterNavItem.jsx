@@ -7,7 +7,7 @@ const FilterNavItem = ({ filter, currentFilter, setFilter, children }) => {
       className={`nav-item ${filter === currentFilter ? 'active' : ''}`}
       onClick={() => setFilter(filter)}
     >
-      <a href="#" className="nav-link">
+      <a href="#" className={`nav-link ${filter === currentFilter ? 'active-link' : ''} fw-bold`}>
         {children}
       </a>
     </li>
