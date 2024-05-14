@@ -81,16 +81,11 @@ div.button, div.checker, div.radio, div.selector, div.uploader {
 .todo-item {
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 48px;
 }
 
 .task {
   flex-grow: 1; /* Allow the task span to grow to fill available space */
-}
-
-/* Apply line-through style to the text when the checkbox is checked */
-.todo-item .task-checkbox:checked + .task {
-  text-decoration: line-through;
 }
 
 .add-task {

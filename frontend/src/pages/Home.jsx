@@ -1,16 +1,19 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import Todo from "../components/Todo";
 import api from "../api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import FilterNavItem from '../components/FilterNavItem'; 
 
 const Home = () => {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
+  const [filter, setFilter] = useState("all"); 
+  const [user, setUser] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getTodos();
+    getUser();
   }, []);
 
   const getTodos = async () => {
@@ -18,7 +21,7 @@ const Home = () => {
       const response = await api.get("/api/todos/");
       setTodos(response.data);
     } catch (error) {
-      alert("error fetching todos" + error);
+      alert("Error fetching todos: " + error);
     }
   };
 
@@ -32,6 +35,7 @@ const Home = () => {
       if (response.status === 201) {
         alert("Task added.");
         setTodo("");
+        setFilter("all")
         getTodos();
       }
     } catch (error) {
@@ -41,8 +45,25 @@ const Home = () => {
     }
   };
 
+  const getUser = async () => {
+    try {
+      const response = await api.get("/api/user/");
+      if (response.status === 200) {
+        setUser(response.data.username);
+      }
+    } catch (error) {
+      alert("Problem retrieving user.");
+    }
+  };
+
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "all") return true;
+    if (filter === "active") return !todo.is_completed;
+    if (filter === "completed") return todo.is_completed;
+    return true;
+  });
+
   const deleteTodo = async (id) => {
-    console.log("pressed delete");
     try {
       const response = await api.delete(`/api/todos/delete/${id}/`);
       if (response.status === 204) {
@@ -50,20 +71,34 @@ const Home = () => {
         getTodos();
       }
     } catch (error) {
-      alert("error deleting task " + error);
+      alert("Error deleting task: " + error);
+    }
+  };
+
+  const toggleComplete = async (id) => {
+    const todo = todos.find((todo) => todo.id === id);
+    if (!todo) return;
+
+    try {
+      const response = await api.patch(`/api/todos/${id}/complete/`, { is_completed: !todo.is_completed });
+      if (response.status === 200) {
+        getTodos();
+      }
+    } catch (error) {
+      alert("Error updating task: " + error);
     }
   };
 
   return (
     <>
-      <div className="container ">
+      <div className="container">
         <div className="row">
           <div className="col-md-12">
             <div className="card card-white">
               <div className="card-body">
                 <div className="row g-2">
                   <div className="col">
-                    <h4>Hello, John Paul Geralla!</h4>
+                    <h4>Hello, {user}!</h4>
                   </div>
                   <div className="col-auto">
                     <Link to="/logout">
@@ -89,7 +124,7 @@ const Home = () => {
 
                   <div className="col">
                     <button
-                      disabled={loading ? true : false}
+                      disabled={loading}
                       type="submit"
                       className="btn btn-success mb-3"
                       onClick={createTodo}
@@ -99,28 +134,20 @@ const Home = () => {
                   </div>
                 </form>
                 <ul className="nav nav-pills todo-nav">
-                  <li role="presentation" className="nav-item all-task active">
-                    <a href="#" className="nav-link">
-                      All
-                    </a>
-                  </li>
-                  <li role="presentation" className="nav-item active-task">
-                    <a href="#" className="nav-link">
-                      Active
-                    </a>
-                  </li>
-                  <li role="presentation" className="nav-item completed-task">
-                    <a href="#" className="nav-link">
-                      Completed
-                    </a>
-                  </li>
+                <FilterNavItem filter="all" currentFilter={filter} setFilter={setFilter}>
+                    All
+                  </FilterNavItem>
+                  <FilterNavItem filter="active" currentFilter={filter} setFilter={setFilter}>
+                    Active
+                  </FilterNavItem>
+                  <FilterNavItem filter="completed" currentFilter={filter} setFilter={setFilter}>
+                    Completed
+                  </FilterNavItem>
                 </ul>
                 <div className="todo-list">
-                  {todos.map((todo) => {
-                    return (
-                      <Todo todo={todo} key={todo.id} onDelete={deleteTodo} />
-                    );
-                  })}
+                  {filteredTodos.map((todo) => (
+                    <Todo todo={todo} key={todo.id} onDelete={deleteTodo} onToggleComplete={toggleComplete} />
+                  ))}
                 </div>
               </div>
             </div>

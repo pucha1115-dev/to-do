@@ -12,7 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function Logout() {
-  localStorage.clear();
+  localStorage.clear()
   return <Navigate to="/login" />;
 }
 

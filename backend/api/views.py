@@ -23,7 +23,7 @@ class TodoListView(APIView):
     
 class TodoUpdateView(APIView):
     permission_classes = [IsAuthenticated]
-     
+
     def put(self, request, pk):
         todo = Todo.objects.get(author=request.user, pk=pk)
         serializer = TodoSerializer(todo, data=request.data)
@@ -32,12 +32,29 @@ class TodoUpdateView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class TodoUpdateCompletionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            todo = Todo.objects.get(author=request.user, pk=pk)
+        except Todo.DoesNotExist:
+            return Response({'error': 'Todo not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = TodoSerializer(todo, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class TodoDeleteView(APIView):
     permission_classes = [IsAuthenticated]
     
     def delete(self, request, pk):
         Todo.objects.filter(author=request.user, pk=pk).delete()
         return Response({"status": "deleted"},status=status.HTTP_204_NO_CONTENT)
+    
+
 
 class CreateUserView(APIView):
     permission_classes = [AllowAny]
@@ -48,3 +65,15 @@ class CreateUserView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+
+
+        

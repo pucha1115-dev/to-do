@@ -3,6 +3,7 @@
 //import { Link } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { jwtDecode } from "jwt-decode";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
@@ -18,9 +19,12 @@ const Login = () => {
   }, []);
 
   const isLoggedIn = () => {
-    const token = localStorage.getItem(ACCESS_TOKEN);
-    if (token) {
-      console.log("token available");
+    const accessToken = localStorage.getItem(ACCESS_TOKEN); 
+    const now = Date.now() / 1000;
+    const decodedAccessToken = jwtDecode(accessToken); //decode the token
+    const accessTokenExpiration = decodedAccessToken.exp; // get the token expiration
+    if (accessToken && accessTokenExpiration > now) {
+      console.log("token available and not expired");
       navigate("/");
     }
   };

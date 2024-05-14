@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 
 function ProtectedRoute({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(null);
+  
 
   useEffect(() => {
     auth().catch(() => setIsAuthorized(false));
@@ -33,7 +34,7 @@ function ProtectedRoute({ children }) {
   };
 
   const auth = async () => {
-    const refreshToken_ = localStorage.getItem(REFRESH_TOKEN);
+    const refreshtoken = localStorage.getItem(REFRESH_TOKEN);
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
     if (!accessToken) {
@@ -41,7 +42,7 @@ function ProtectedRoute({ children }) {
       return;
     }
     const now = Date.now() / 1000;
-    const decodedRefreshToken = jwtDecode(refreshToken_); //decode the token
+    const decodedRefreshToken = jwtDecode(refreshtoken); //decode the token
     const refreshTokenExpiration = decodedRefreshToken.exp;
     const decodedAccessToken = jwtDecode(accessToken); //decode the token
     const accessTokenExpiration = decodedAccessToken.exp; // get the token expiration
@@ -51,7 +52,6 @@ function ProtectedRoute({ children }) {
       return;
     }
 
-    // if token is expired, refresh it
     if (accessTokenExpiration < now) {
       await refreshToken();
       console.log("refreshed token");
