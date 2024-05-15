@@ -41,7 +41,7 @@ api.interceptors.response.use(
             }
 
             try {
-                const response = await api.post('/api/token/refresh/', { // refresh the token
+                const response = await axios.post('http://localhost:8000/api/token/refresh/', { // refresh the token
                     refresh: refreshToken,
                 });
 
@@ -54,6 +54,7 @@ api.interceptors.response.use(
                     throw new Error("Token refresh failed with status: " + response.status);
                 }
             } catch (error) {
+                console.log("refresh token expired")
                 window.location.href = '/login'; // Redirect to login if token refresh fails
                 return Promise.reject(error);
             }

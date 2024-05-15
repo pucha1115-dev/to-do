@@ -37,25 +37,24 @@ const Login = () => {
     const isValidEmail = emailRegex.test(email);
     const isValidPassword = password.length > 0;
 
-    if(!isValidEmail){
+    if (!isValidEmail) {
       alert("Please enter a valid email address.");
       return false;
     }
 
-    if (!isValidPassword){
+    if (!isValidPassword) {
       alert("Please enter your password.");
       return false;
     }
 
     return true;
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(true);
     if (!validateInputs()) return; // Validate inputs before submission
     setLoading(true);
-    
- 
+
     try {
       const response = await api.post("/api/token/", { email, password });
       localStorage.setItem(ACCESS_TOKEN, response.data.access);
@@ -108,8 +107,8 @@ const Login = () => {
                 </button>
               </div>
               <div className="text-center mt-3">
-                <a href="#">Forgot password?</a> Don't have an account?{" "}
-                <Link to="/register">Register</Link>
+                <Link to="/password-reset-request">Forgot password?</Link> Don't
+                have an account? <Link to="/register">Register</Link>
               </div>
             </form>
           </div>

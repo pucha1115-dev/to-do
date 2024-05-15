@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 //import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -20,17 +21,18 @@ const Register = () => {
   }, []);
 
   const validateInputs = () => {
-    const nameRegex = /^[a-zA-Z0-9 ]{3,}$/; 
+    const nameRegex = /^[a-zA-Z0-9 ]{3,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidname = nameRegex.test(name);
     const isValidPassword = password.length >= 6;
     const isValidEmail = emailRegex.test(email);
 
     if (!isValidname) {
-      alert("Name must be at least 3 characters long and contain only letters and numbers.");
+      alert(
+        "Name must be at least 3 characters long and contain only letters and numbers."
+      );
       return false;
     }
-    
 
     if (!isValidEmail) {
       alert("Please enter a valid email address.");
@@ -48,20 +50,19 @@ const Register = () => {
     e.preventDefault();
     if (!validateInputs()) return; // Validate inputs before submission
     setLoading(true);
-    
 
     try {
       const response = await api.post("/api/user/register/", {
         name,
         password,
-        email
+        email,
       });
       console.log(response.data);
-      alert("Registered successfully. You will be redirected to Login page.")
+      alert("Registered successfully. You will be redirected to Login page.");
       setLoading(false);
       navigate("/login");
     } catch (error) {
-      alert(error);
+      alert("Email already exists.");
     } finally {
       setLoading(false);
     }
@@ -109,7 +110,7 @@ const Register = () => {
                   className="btn btn-primary btn-block"
                   onClick={handleSubmit}
                 >
-                  {loading ? <Spinner size={"sm"} /> : "Sign in"}
+                  {loading ? <Spinner size={"sm"} /> : "Submit"}
                 </button>
               </div>
               <div className="text-center mt-3">

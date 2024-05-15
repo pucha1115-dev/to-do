@@ -2,13 +2,13 @@ import Todo from "../components/Todo";
 import api from "../api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import FilterNavItem from '../components/FilterNavItem'; 
+import FilterNavItem from "../components/FilterNavItem";
 import Spinner from "../components/Spinner";
 
 const Home = () => {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
-  const [filter, setFilter] = useState("all"); 
+  const [filter, setFilter] = useState("all");
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +22,7 @@ const Home = () => {
       const response = await api.get("/api/todos/");
       setTodos(response.data);
     } catch (error) {
-      alert("Error fetching todos: " + error);
+      alert("You have been logged out. Please Login again.");
     }
   };
 
@@ -35,11 +35,11 @@ const Home = () => {
       const response = await api.post("/api/todos/", { task: todo, due_date });
       if (response.status === 201) {
         setTodo("");
-        setFilter("all")
+        setFilter("all");
         getTodos();
       }
     } catch (error) {
-      alert("Failed to add new task.");
+      alert("You have been logged out. Please Login again.");
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ const Home = () => {
         setUser(response.data.name);
       }
     } catch (error) {
-      alert("You have been logged out. Please Login again."); // 
+      alert("You have been logged out. Please Login again."); //
     }
   };
 
@@ -70,7 +70,7 @@ const Home = () => {
         getTodos();
       }
     } catch (error) {
-      alert("Error deleting task: " + error);
+      alert("You have been logged out. Please Login again.");
     }
   };
 
@@ -79,12 +79,14 @@ const Home = () => {
     if (!todo) return;
 
     try {
-      const response = await api.patch(`/api/todos/${id}/complete/`, { is_completed: !todo.is_completed });
+      const response = await api.patch(`/api/todos/${id}/complete/`, {
+        is_completed: !todo.is_completed,
+      });
       if (response.status === 200) {
         getTodos();
       }
     } catch (error) {
-      alert("Error updating task: " + error);
+      alert("You have been logged out. Please Login again.");
     }
   };
 
@@ -123,32 +125,79 @@ const Home = () => {
 
                   <div className="col">
                     <button
-                      disabled={todo === ""? true: false}
+                      disabled={todo === "" ? true : false}
                       type="submit"
                       className="btn btn-success mb-3"
                       onClick={createTodo}
                     >
-                      {loading? <Spinner/> : "Add Todo" }
+                      {loading ? <Spinner /> : "Add Todo"}
                     </button>
                   </div>
                 </form>
                 <ul className="nav nav-pills todo-nav">
-                <FilterNavItem filter="all" currentFilter={filter} setFilter={setFilter}>
+                  <FilterNavItem
+                    filter="all"
+                    currentFilter={filter}
+                    setFilter={setFilter}
+                  >
                     All
                   </FilterNavItem>
-                  <FilterNavItem filter="active" currentFilter={filter} setFilter={setFilter}>
+                  <FilterNavItem
+                    filter="active"
+                    currentFilter={filter}
+                    setFilter={setFilter}
+                  >
                     Active
                   </FilterNavItem>
-                  <FilterNavItem filter="completed" currentFilter={filter} setFilter={setFilter}>
+                  <FilterNavItem
+                    filter="completed"
+                    currentFilter={filter}
+                    setFilter={setFilter}
+                  >
                     Completed
                   </FilterNavItem>
                 </ul>
                 <div className="todo-list">
-                {filter === "completed" && filteredTodos.length === 0 && (<div style={{fontWeight: "bold", color: "gray", marginTop: 10}}>No completed todos.</div>)}
-                {filter === "active" && filteredTodos.length === 0 && (<div style={{fontWeight: "bold", color: "gray", marginTop: 10}}>No active todos.</div>)}
-                {filter === "all" && filteredTodos.length === 0 && (<div style={{fontWeight: "bold", color: "gray", marginTop: 10}}>You have no task for the day!</div>)}
+                  {filter === "completed" && filteredTodos.length === 0 && (
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        color: "gray",
+                        marginTop: 10,
+                      }}
+                    >
+                      No completed todos.
+                    </div>
+                  )}
+                  {filter === "active" && filteredTodos.length === 0 && (
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        color: "gray",
+                        marginTop: 10,
+                      }}
+                    >
+                      No active todos.
+                    </div>
+                  )}
+                  {filter === "all" && filteredTodos.length === 0 && (
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        color: "gray",
+                        marginTop: 10,
+                      }}
+                    >
+                      You have no task for the day!
+                    </div>
+                  )}
                   {filteredTodos.map((todo) => (
-                    <Todo todo={todo} key={todo.id} onDelete={deleteTodo} onToggleComplete={toggleComplete} />
+                    <Todo
+                      todo={todo}
+                      key={todo.id}
+                      onDelete={deleteTodo}
+                      onToggleComplete={toggleComplete}
+                    />
                   ))}
                 </div>
               </div>

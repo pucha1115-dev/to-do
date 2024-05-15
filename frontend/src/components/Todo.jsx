@@ -31,9 +31,21 @@ const Todo = ({ todo, onDelete, onToggleComplete }) => {
     <>
       <div className="todo-item">
         <div className="checker">
-          <input className="task-checkbox" type="checkbox" checked={todo.is_completed} onChange={handleCheckboxChange}/>
+          <input
+            className="task-checkbox"
+            type="checkbox"
+            checked={todo.is_completed}
+            onChange={handleCheckboxChange}
+          />
         </div>
-        <span className="task" style={{textDecoration: todo.is_completed? 'line-through' : 'none'}}>{todo.task}</span>
+        <span
+          className="task"
+          style={{
+            textDecoration: todo.is_completed ? "line-through" : "none",
+          }}
+        >
+          {todo.task}
+        </span>
         <img className="due-date-image" src={due_date_image} alt="due date" />
         <span className="due-date">{formatDate(todo.due_date)}</span>
         <button className="btn" onClick={() => onDelete(todo.id)}>
