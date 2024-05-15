@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Todo
-from .serializer import TodoSerializer, UserSerializer
+from .serializer import TodoSerializer, CustomUserSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -60,7 +60,7 @@ class CreateUserView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -71,7 +71,7 @@ class GetUserView(APIView):
 
     def get(self, request):
         user = self.request.user
-        serializer = UserSerializer(user)
+        serializer = CustomUserSerializer(user)
         return Response(serializer.data)
     
 

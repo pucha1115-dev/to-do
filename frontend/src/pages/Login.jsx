@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(null);
   const navigate = useNavigate();
@@ -32,18 +32,38 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    setLoading(true);
-    e.preventDefault(true);
+  const validateInputs = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(email);
+    const isValidPassword = password.length > 0;
 
+    if(!isValidEmail){
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    if (!isValidPassword){
+      alert("Please enter your password.");
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(true);
+    if (!validateInputs()) return; // Validate inputs before submission
+    setLoading(true);
+    
+ 
     try {
-      const response = await api.post("/api/token/", { username, password });
+      const response = await api.post("/api/token/", { email, password });
       localStorage.setItem(ACCESS_TOKEN, response.data.access);
-      localStorage.setItem(REFRESH_TOKEN, response.data.access);
+      localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
       setLoading(false);
       navigate("/");
     } catch (error) {
-      alert("Invalid username or password.");
+      alert("Invalid email or password.");
     } finally {
       setLoading(false);
     }
@@ -60,10 +80,10 @@ const Login = () => {
                 <input
                   type="text"
                   className="form-control"
-                  value={username}
+                  value={email}
                   id="inputEmail"
-                  placeholder="Username"
-                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>

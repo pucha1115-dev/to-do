@@ -31,8 +31,8 @@ api.interceptors.response.use(
             originalRequest._retry = true;
             const refreshToken = localStorage.getItem(REFRESH_TOKEN);// retrieve the refresh token
             
-            if(window.location.pathname === "/login"){
-                return;
+            if(window.location.pathname === "/login" || window.location.pathname === "/register"){
+                return Promise.reject(error); 
             }
 
             if (!refreshToken) {
@@ -41,14 +41,17 @@ api.interceptors.response.use(
             }
 
             try {
-                const response = await axios.post('/api/token/refresh/', { // refresh the token
+                const response = await api.post('/api/token/refresh/', { // refresh the token
                     refresh: refreshToken,
                 });
 
-                if (response.status === 200) { // if successful, store the new access token to localstorage and the update the authorization header with the new token
+                if (response.status === 200) { // if successful, store the new access token to localstorage and the update the authorization header with the new token and do the request again
+                    console.log("token renewed")
                     localStorage.setItem(ACCESS_TOKEN, response.data.access);
                     originalRequest.headers['Authorization'] = 'Bearer ' + response.data.access;
                     return api(originalRequest);
+                } else{
+                    throw new Error("Token refresh failed with status: " + response.status);
                 }
             } catch (error) {
                 window.location.href = '/login'; // Redirect to login if token refresh fails

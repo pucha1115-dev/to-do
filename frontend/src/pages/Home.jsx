@@ -3,6 +3,7 @@ import api from "../api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import FilterNavItem from '../components/FilterNavItem'; 
+import Spinner from "../components/Spinner";
 
 const Home = () => {
   const [todos, setTodos] = useState([]);
@@ -33,7 +34,6 @@ const Home = () => {
     try {
       const response = await api.post("/api/todos/", { task: todo, due_date });
       if (response.status === 201) {
-        alert("Task added.");
         setTodo("");
         setFilter("all")
         getTodos();
@@ -49,10 +49,10 @@ const Home = () => {
     try {
       const response = await api.get("/api/user/");
       if (response.status === 200) {
-        setUser(response.data.username);
+        setUser(response.data.name);
       }
     } catch (error) {
-      alert("Problem retrieving user.");
+      alert("You have been logged out. Please Login again."); // 
     }
   };
 
@@ -67,7 +67,6 @@ const Home = () => {
     try {
       const response = await api.delete(`/api/todos/delete/${id}/`);
       if (response.status === 204) {
-        alert("Task Deleted.");
         getTodos();
       }
     } catch (error) {
@@ -124,12 +123,12 @@ const Home = () => {
 
                   <div className="col">
                     <button
-                      disabled={loading}
+                      disabled={todo === ""? true: false}
                       type="submit"
                       className="btn btn-success mb-3"
                       onClick={createTodo}
                     >
-                      Add Todo
+                      {loading? <Spinner/> : "Add Todo" }
                     </button>
                   </div>
                 </form>
@@ -145,6 +144,9 @@ const Home = () => {
                   </FilterNavItem>
                 </ul>
                 <div className="todo-list">
+                {filter === "completed" && filteredTodos.length === 0 && (<div style={{fontWeight: "bold", color: "gray", marginTop: 10}}>No completed todos.</div>)}
+                {filter === "active" && filteredTodos.length === 0 && (<div style={{fontWeight: "bold", color: "gray", marginTop: 10}}>No active todos.</div>)}
+                {filter === "all" && filteredTodos.length === 0 && (<div style={{fontWeight: "bold", color: "gray", marginTop: 10}}>You have no task for the day!</div>)}
                   {filteredTodos.map((todo) => (
                     <Todo todo={todo} key={todo.id} onDelete={deleteTodo} onToggleComplete={toggleComplete} />
                   ))}

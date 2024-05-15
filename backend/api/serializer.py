@@ -1,17 +1,16 @@
 
-from .models import Todo
-from django.contrib.auth.models import User
+from .models import Todo, CustomUser
 from rest_framework import serializers
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ["id", "username", "email", "password" ]
+        model = CustomUser
+        fields = ["id", "name", "email", "password" ]
         extra_kwargs = {"password":{"write_only": True}}
     
     def create(self, validated_data):
         password = validated_data.pop('password', None)
-        user = User.objects.create_user(**validated_data)
+        user = CustomUser.objects.create(**validated_data)
         if password is not None:
             user.set_password(password)
             user.save()
