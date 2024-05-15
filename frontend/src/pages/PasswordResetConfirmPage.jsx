@@ -3,10 +3,12 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PasswordResetConfirmPage = ({ token }) => {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +17,12 @@ const PasswordResetConfirmPage = ({ token }) => {
         token,
         new_password: newPassword,
       });
-      setMessage("Password has been reset successfully.");
+      setMessage(
+        "Password has been reset successfully. Redirecting to Login Page..."
+      );
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     } catch (error) {
       setMessage("An error occurred. Please try again.");
     }

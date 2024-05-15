@@ -9,6 +9,7 @@ import PasswordResetConfirmPage from "./pages/PasswordResetConfirmPage";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import { useParams } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -23,12 +24,14 @@ function App() {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenParam = urlParams.get("token");
-    if (tokenParam) {
-      setToken(tokenParam);
+    const path = window.location.pathname;
+    const segments = path.split("/"); // Split the path into segments
+    const tokenFromUrl = segments[segments.length - 2]; // Assuming the token is the last segment/ Assuming the token is the last segment
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
     }
   }, []);
+
   return (
     // <Test />
     <BrowserRouter>
@@ -51,7 +54,7 @@ function App() {
           element={<PasswordResetRequestPage />}
         />
         <Route
-          path="/password-reset-confirm"
+          path="/password-reset-confirm/:token"
           element={<PasswordResetConfirmPage token={token} />}
         />
         <Route path="*" element={<NotFound />} />

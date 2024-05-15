@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 
 function ProtectedRoute({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(null);
-  
 
   useEffect(() => {
     auth().catch(() => setIsAuthorized(false));
@@ -41,6 +40,7 @@ function ProtectedRoute({ children }) {
       setIsAuthorized(false);
       return;
     }
+
     const now = Date.now() / 1000;
     const decodedRefreshToken = jwtDecode(refreshtoken); //decode the token
     const refreshTokenExpiration = decodedRefreshToken.exp;
@@ -55,9 +55,11 @@ function ProtectedRoute({ children }) {
     if (accessTokenExpiration < now) {
       await refreshToken();
       console.log("refreshed token");
-    } else {
       setIsAuthorized(true);
+      return;
     }
+
+    setIsAuthorized(true);
   };
 
   if (isAuthorized === null) {
