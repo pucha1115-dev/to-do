@@ -1,12 +1,11 @@
 // PasswordResetRequestForm.js
 import { useState } from "react";
 import axios from "axios";
-import Spinner from "../components/Spinner";
 
 const PasswordResetRequestPage = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   // Function to validate email using regular expression
   const isEmailValid = (email) => {
@@ -16,12 +15,12 @@ const PasswordResetRequestPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
 
-    if(!isEmailValid(email)){
+    if (!isEmailValid(email)) {
       setMessage("Please enter a valid email address.");
-      setLoading(false)
+      setLoading(false);
       return;
     }
 
@@ -32,22 +31,31 @@ const PasswordResetRequestPage = () => {
       setMessage("The email you entered is not associated with any account.");
     }
 
-    setLoading(false)
+    setLoading(false);
   };
 
   return (
     <div className="password-reset-container">
       <h2>Password Reset Request</h2>
       <div className="task-field">
-              <input className="input-field" type="text" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)}
-                      required/>
-              <button className="task-entry-button" disabled={email === "" ? true : false} onClick={handleSubmit}>
-    Reset
-              </button>
-            </div>
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <button
+          className="task-entry-action"
+          disabled={email === "" ? true : false}
+          onClick={handleSubmit}
+        >
+          Reset
+        </button>
+      </div>
       <p className="mt-3 text-danger">{message}</p>
     </div>
-    
   );
 };
 

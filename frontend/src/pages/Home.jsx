@@ -93,67 +93,77 @@ const Home = () => {
 
   return (
     <>
-    <section className="to-do-section">
+      <section className="to-do-section">
         <div className="container">
           <div className="row">
-          <div className="col">
-                    <h4>Hello, {user}!</h4>
-                  </div>
-                  <div className="col-auto">
-                    <Link to="/logout">
-                      <button className="btn btn-logout">
-                        Logout
-                      </button>
-                    </Link>
-                  </div>
+            <div className="col">
+              <h4>Hello, {user}!</h4>
+            </div>
+            <div className="col-auto">
+              <Link to="/logout">
+                <button className="btn btn-logout">Logout</button>
+              </Link>
+            </div>
             <div className="task-field">
-              <input className="input-field" type="text" placeholder="New Task..." value={todo} onChange={(e) => setTodo(e.target.value)}
-                      required/>
-              <button className="task-entry-button" disabled={todo === "" ? true : false} onClick={createTodo}>
-              {loading ? <Spinner /> : "Enter"}
+              <input
+                className="input-field"
+                type="text"
+                placeholder="New Task..."
+                value={todo}
+                onChange={(e) => setTodo(e.target.value)}
+                required
+              />
+              <button
+                className="btn task-entry-button"
+                disabled={todo === "" ? true : false}
+                onClick={createTodo}
+              >
+                {loading ? <Spinner /> : "Enter"}
               </button>
             </div>
             <div className="to-do-information">
               <ul className="todo-nav">
-                  <FilterNavItem
-                    filter="all"
-                    currentFilter={filter}
-                    setFilter={setFilter}
-                  >
-                    All ({todos.length})
-                  </FilterNavItem>
-                  <FilterNavItem
-                    filter="active"
-                    currentFilter={filter}
-                    setFilter={setFilter}
-                  >
-                    Active ({todos.filter(todo => todo.is_completed === false).length})
-                  </FilterNavItem>
-                  <FilterNavItem
-                    filter="completed"
-                    currentFilter={filter}
-                    setFilter={setFilter}
-                  >
-                    Completed ({todos.filter(todo => todo.is_completed === true).length})
-                  </FilterNavItem>
-                </ul>
+                <FilterNavItem
+                  filter="all"
+                  currentFilter={filter}
+                  setFilter={setFilter}
+                >
+                  All ({todos.length})
+                </FilterNavItem>
+                <FilterNavItem
+                  filter="active"
+                  currentFilter={filter}
+                  setFilter={setFilter}
+                >
+                  Active (
+                  {todos.filter((todo) => todo.is_completed === false).length})
+                </FilterNavItem>
+                <FilterNavItem
+                  filter="completed"
+                  currentFilter={filter}
+                  setFilter={setFilter}
+                >
+                  Completed (
+                  {todos.filter((todo) => todo.is_completed === true).length})
+                </FilterNavItem>
+              </ul>
               <ul className="to-do-information_counter">
-              {filteredTodos.length === 0 && <NoTodosMessage filter={filter} />}
-              {filteredTodos.map((todo) => (
-                    <Todo
-                      todo={todo}
-                      key={todo.id}
-                      onDelete={deleteTodo}
-                      onToggleComplete={toggleComplete}
-                    />
-                  ))}
+                {filteredTodos.length === 0 && (
+                  <NoTodosMessage filter={filter} />
+                )}
+                {filteredTodos.map((todo) => (
+                  <Todo
+                    todo={todo}
+                    key={todo.id}
+                    onDelete={deleteTodo}
+                    onToggleComplete={toggleComplete}
+                  />
+                ))}
               </ul>
             </div>
           </div>
         </div>
-
       </section>
-      
     </>
   );
 };
