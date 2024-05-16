@@ -73,7 +73,7 @@ const Login = () => {
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <div className="login-container">
-            <h2 className="text-center text-black mb-4">Login</h2>
+            <h1 className="text-center text-white mb-4">Login</h1>
             <form>
               <div className="mb-3">
                 <input
@@ -100,7 +100,7 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={loading ? true : false}
-                  className="btn btn-primary btn-block"
+                  className="btn action-button"
                   onClick={handleSubmit}
                 >
                   {loading ? <Spinner size={"sm"} /> : "Sign in"}

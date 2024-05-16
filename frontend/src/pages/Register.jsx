@@ -73,7 +73,7 @@ const Register = () => {
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <div className="login-container">
-            <h2 className="text-center text-black mb-4">Register</h2>
+            <h1 className="text-center text-white mb-4">Register</h1>
             <form>
               <div className="mb-3">
                 <input
@@ -107,14 +107,14 @@ const Register = () => {
                 <button
                   type="submit"
                   disabled={loading ? true : false}
-                  className="btn btn-primary btn-block"
+                  className="btn action-button"
                   onClick={handleSubmit}
                 >
                   {loading ? <Spinner size={"sm"} /> : "Submit"}
                 </button>
               </div>
               <div className="text-center mt-3">
-                <p className="text-black">
+                <p className="text-white">
                   Already registered? <Link to="/login">Login</Link>
                 </p>
               </div>

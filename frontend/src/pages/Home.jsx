@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import FilterNavItem from "../components/FilterNavItem";
 import Spinner from "../components/Spinner";
+import NoTodosMessage from "../components/NoToDosMessage";
 
 const Home = () => {
   const [todos, setTodos] = useState([]);
@@ -92,106 +93,53 @@ const Home = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="card card-white">
-              <div className="card-body">
-                <div className="row g-2">
-                  <div className="col">
+    <section className="to-do-section">
+        <div className="container">
+          <div className="row">
+          <div className="col">
                     <h4>Hello, {user}!</h4>
                   </div>
                   <div className="col-auto">
                     <Link to="/logout">
-                      <button className="btn btn-outline-danger">
+                      <button className="btn btn-logout">
                         Logout
-                        <i className="bi bi-box-arrow-right custom-icon"></i>
                       </button>
                     </Link>
                   </div>
-                </div>
-                <br />
-                <form className="row g-2">
-                  <div className="col">
-                    <input
-                      type="text"
-                      value={todo}
-                      className="form-control add-task"
-                      placeholder="New Task..."
-                      onChange={(e) => setTodo(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="col">
-                    <button
-                      disabled={todo === "" ? true : false}
-                      type="submit"
-                      className="btn btn-success mb-3"
-                      onClick={createTodo}
-                    >
-                      {loading ? <Spinner /> : "Add Todo"}
-                    </button>
-                  </div>
-                </form>
-                <ul className="nav nav-pills todo-nav">
+            <div className="task-field">
+              <input className="input-field" type="text" placeholder="New Task..." value={todo} onChange={(e) => setTodo(e.target.value)}
+                      required/>
+              <button className="task-entry-button" disabled={todo === "" ? true : false} onClick={createTodo}>
+              {loading ? <Spinner /> : "Enter"}
+              </button>
+            </div>
+            <div className="to-do-information">
+              <ul className="todo-nav">
                   <FilterNavItem
                     filter="all"
                     currentFilter={filter}
                     setFilter={setFilter}
                   >
-                    All
+                    All ({todos.length})
                   </FilterNavItem>
                   <FilterNavItem
                     filter="active"
                     currentFilter={filter}
                     setFilter={setFilter}
                   >
-                    Active
+                    Active ({todos.filter(todo => todo.is_completed === false).length})
                   </FilterNavItem>
                   <FilterNavItem
                     filter="completed"
                     currentFilter={filter}
                     setFilter={setFilter}
                   >
-                    Completed
+                    Completed ({todos.filter(todo => todo.is_completed === true).length})
                   </FilterNavItem>
                 </ul>
-                <div className="todo-list">
-                  {filter === "completed" && filteredTodos.length === 0 && (
-                    <div
-                      style={{
-                        fontWeight: "bold",
-                        color: "gray",
-                        marginTop: 10,
-                      }}
-                    >
-                      No completed todos.
-                    </div>
-                  )}
-                  {filter === "active" && filteredTodos.length === 0 && (
-                    <div
-                      style={{
-                        fontWeight: "bold",
-                        color: "gray",
-                        marginTop: 10,
-                      }}
-                    >
-                      No active todos.
-                    </div>
-                  )}
-                  {filter === "all" && filteredTodos.length === 0 && (
-                    <div
-                      style={{
-                        fontWeight: "bold",
-                        color: "gray",
-                        marginTop: 10,
-                      }}
-                    >
-                      You have no task for the day!
-                    </div>
-                  )}
-                  {filteredTodos.map((todo) => (
+              <ul className="to-do-information_counter">
+              {filteredTodos.length === 0 && <NoTodosMessage filter={filter} />}
+              {filteredTodos.map((todo) => (
                     <Todo
                       todo={todo}
                       key={todo.id}
@@ -199,12 +147,13 @@ const Home = () => {
                       onToggleComplete={toggleComplete}
                     />
                   ))}
-                </div>
-              </div>
+              </ul>
             </div>
           </div>
         </div>
-      </div>
+
+      </section>
+      
     </>
   );
 };

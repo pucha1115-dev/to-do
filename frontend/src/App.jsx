@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "./App.css";
+//import "./App.css";
 import Test from "./pages/Test";
 import Header from "./components/Header";
 import PasswordResetRequestPage from "./pages/PasswordResetRequestPage";
@@ -33,7 +33,6 @@ function App() {
   }, []);
 
   return (
-    // <Test />
     <BrowserRouter>
       <Header />
       <Routes>

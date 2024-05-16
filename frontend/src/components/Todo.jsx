@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import due_date_image from "../assets/due-date.png";
+//import due_date_image from "../assets/due-date.png";
 const Todo = ({ todo, onDelete, onToggleComplete }) => {
   const handleCheckboxChange = () => {
     onToggleComplete(todo.id);
@@ -29,7 +29,19 @@ const Todo = ({ todo, onDelete, onToggleComplete }) => {
   };
   return (
     <>
-      <div className="todo-item">
+    <li className="list">
+                  <div className="task-container">
+                    <input type="checkbox" checked={todo.is_completed}
+            onChange={handleCheckboxChange}/>
+                    <span className="task" style={{
+            textDecoration: todo.is_completed ? "line-through" : "none",
+          }}>{todo.task}</span>
+                  </div>
+                  <div className="icon-background" onClick={() => onDelete(todo.id)}>
+                  <i class="bi bi-trash" style={{fontSize: 18}}></i>
+                  </div>
+                </li>
+      {/* <div className="todo-item">
         <div className="checker">
           <input
             className="task-checkbox"
@@ -52,7 +64,7 @@ const Todo = ({ todo, onDelete, onToggleComplete }) => {
           {" "}
           <i className="bi bi-trash-fill delete-icon"></i>
         </button>
-      </div>
+      </div> */}
     </>
   );
 };
