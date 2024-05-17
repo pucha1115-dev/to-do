@@ -157,5 +157,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'testmail.jp1115@gmail.com'
 EMAIL_HOST_PASSWORD = 'kwxe rwck cblx enel'
 DEFAULT_FROM_EMAIL = 'testmail.jp1115@gmail.com'
-
 FRONTEND_URL = 'http://localhost:5173'
