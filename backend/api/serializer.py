@@ -5,9 +5,6 @@ from django.core.mail import send_mail
 from django.conf import settings
 import uuid
 from rest_framework import serializers
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.conf import settings
 from django.utils.crypto import get_random_string
 
 
