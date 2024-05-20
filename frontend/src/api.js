@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000', // Adjust the base URL to your backend
+    baseURL: 'http://3.24.180.65:8000', // Adjust the base URL to your backend
 });
 
 // Request interceptor to add the access token to headers
@@ -41,7 +41,7 @@ api.interceptors.response.use(
             }
 
             try {
-                const response = await axios.post('http://localhost:8000/api/token/refresh/', { // refresh the token
+                const response = await axios.post('http://3.24.180.65:8000/api/token/refresh/', { // refresh the token
                     refresh: refreshToken,
                 });
 
