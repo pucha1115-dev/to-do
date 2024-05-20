@@ -100,4 +100,4 @@ class ServerStatusView(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request):
-        return Response({"server status": "active"})
+        return Response({"server status": "online"})
